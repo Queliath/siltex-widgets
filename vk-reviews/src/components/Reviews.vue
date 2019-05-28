@@ -1,5 +1,17 @@
 <template>
     <div class="wall_module">
+        <div class="pagination-wrapper">
+            <div class="reviews-pagination">
+                <a v-for="page in pages"
+                   v-on:click="onPageChanged(page.number)"
+                   class="reviews-pagination-item"
+                   v-bind:class="{ active: page.number === currentPageNumber}">
+                    {{ page.number }}
+                </a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
         <div class="bt_rows">
             <div class="bp_post" v-for="review in reviews">
                 <a class="bp_thumb" href="#">
@@ -22,10 +34,13 @@
             </div>
         </div>
 
-        <div>
-            <button v-for="page in pages" v-on:click="onPageChanged(page.number)">
-                {{ page.number }} <span v-if="page.number === currentPageNumber">active</span>
-            </button>
+        <div class="reviews-pagination">
+            <a v-for="page in pages"
+                    v-on:click="onPageChanged(page.number)"
+                    class="reviews-pagination-item"
+                    v-bind:class="{ active: page.number === currentPageNumber}">
+                {{ page.number }}
+            </a>
         </div>
     </div>
 </template>
@@ -48,8 +63,6 @@
 
             reviewsService.loadComments(self.currentPageNumber).then(
                     function (jsonpResponse) {
-                        console.log(jsonpResponse);
-
                         self.updatePagination(jsonpResponse, self);
                         self.updateReviewsList(jsonpResponse, self);
                     });
@@ -95,6 +108,8 @@
                 });
             },
             updateReviewsList: function (jsonpResponse, self) {
+                console.log(jsonpResponse);
+                
                 var response = jsonpResponse.response;
 
                 var profilesMap = new Map();
@@ -117,9 +132,14 @@
                             }
                         });
                     }
-
+                    
+                    var cleanedText = item.text;
+                    if (cleanedText.indexOf('[id') !== -1 || cleanedText.indexOf('[club') !== -1) {
+                        cleanedText = cleanedText.replace(cleanedText.substring(cleanedText.indexOf('['), cleanedText.indexOf('|') + 1), '');
+                        cleanedText = cleanedText.replace(']', '');
+                    }
                     self.reviews.push({
-                        text: item.text,
+                        text: cleanedText,
                         date: new Date(item.date * 1000).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
                         userName: user.first_name + ' ' + user.last_name,
                         imageUrl: user.photo_50,
@@ -204,5 +224,29 @@
         max-width: 100%;
         max-height: 250px;
         margin-right: 5px;
+    }
+    .pagination-wrapper {
+        padding-bottom: 7px;
+    }
+    .reviews-pagination {
+        float: right;
+        margin-right: 15px;
+        margin-top: 10px;
+    }
+    .reviews-pagination-item {
+        padding: 3px 5px 7px;
+        color: #939393;
+        font-size: 12.5px;
+    }
+    .reviews-pagination-item:hover {
+        border-bottom: 2px solid #b7cce7;
+        color: #727d83;
+    }
+    .reviews-pagination-item.active {
+        border-bottom: 2px solid #6587ac;
+        color: #2b2f33;
+    }
+    .clearfix {
+        clear: both;
     }
 </style>
