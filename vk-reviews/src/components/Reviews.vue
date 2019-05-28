@@ -35,13 +35,16 @@
             </div>
         </div>
 
-        <div class="reviews-pagination">
-            <a v-for="page in pages"
-                    v-on:click="onPageChanged(page.number)"
-                    class="reviews-pagination-item"
-                    v-bind:class="{ active: page.number === currentPageNumber}">
-                {{ page.number }}
-            </a>
+        <div class="pagination-wrapper">
+            <div class="reviews-pagination">
+                <a v-for="page in pages"
+                   v-on:click="onPageChanged(page.number)"
+                   class="reviews-pagination-item"
+                   v-bind:class="{ active: page.number === currentPageNumber}">
+                    {{ page.number }}
+                </a>
+            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
 </template>
@@ -160,7 +163,7 @@
 <style scoped>
     .wall_module {
         width: 100%;
-        max-width: 800px;
+        max-width: 1140px;
         text-align: left;
         margin: 0 auto;
     }
@@ -226,6 +229,7 @@
         margin-top: 5px;
     }
     .review-photo {
+        width: unset;
         max-width: 100%;
         max-height: 250px;
         margin-right: 5px;
