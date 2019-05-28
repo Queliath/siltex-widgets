@@ -14,13 +14,13 @@
 
         <div class="bt_rows">
             <div class="bp_post" v-for="review in reviews">
-                <a class="bp_thumb" href="#">
+                <a class="bp_thumb" :href="review.userUrl">
                     <img class="bp_img" :src="review.imageUrl"/>
                 </a>
                 <div class="bp_info">
                     <div class="bp_author_wrap">
-                        <a class="bp_author" href="#">{{ review.userName }} </a>
-                        <a class="bp_date" href="#">{{ review.date }}</a>
+                        <a class="bp_author" :href="review.userUrl">{{ review.userName }} </a>
+                        <a class="bp_date" :href="review.userUrl">{{ review.date }}</a>
                     </div>
                     <div class="bp_content">
                         <div class="bp_text">
@@ -143,6 +143,7 @@
                         date: new Date(item.date * 1000).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
                         userName: user.first_name + ' ' + user.last_name,
                         imageUrl: user.photo_50,
+                        userUrl: 'https://vk.com/' + user.screen_name,
                         photos: photos
                     });
                 });
