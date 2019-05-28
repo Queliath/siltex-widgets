@@ -1,5 +1,6 @@
 <template>
     <div class="wall_module">
+        <h3 v-if="reviewsNumber > 0" class="number-of-reviews">Всего отзывов: {{ reviewsNumber }}</h3>
         <div class="pagination-wrapper">
             <div class="reviews-pagination">
                 <a v-for="page in pages"
@@ -55,7 +56,8 @@
                 reviews: [],
                 currentPageNumber: 1,
                 totalNumberOfPages: 0,
-                pages: []
+                pages: [],
+                reviewsNumber: 0
             }
         },
         created: function () {
@@ -111,6 +113,8 @@
                 console.log(jsonpResponse);
                 
                 var response = jsonpResponse.response;
+
+                self.reviewsNumber = response.count;
 
                 var profilesMap = new Map();
                 response.profiles.forEach(function (profile) {
@@ -249,5 +253,8 @@
     }
     .clearfix {
         clear: both;
+    }
+    .number-of-reviews {
+        padding-left: 20px;
     }
 </style>
